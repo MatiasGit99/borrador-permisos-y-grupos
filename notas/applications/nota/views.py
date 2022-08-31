@@ -9,8 +9,9 @@ from django.views.generic import (
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseForbidden
 
-#
+
 from .models import Nota
+
 
 class IndexView(TemplateView):
     template_name = "nota/index.html"
@@ -30,6 +31,14 @@ class NotaCreateView(CreateView):
     template_name = "nota/add.html"
     success_url = reverse_lazy('nota_app:lista')
 
+    def get(self, request, **kwargs):
+        # verificamos permisos
+        if not self.request.user.groups.filter(name='Scrum Master').exists():
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
 
 class NotaDetailView(DetailView):
     model = Nota
@@ -37,9 +46,8 @@ class NotaDetailView(DetailView):
 
     def get(self, request, **kwargs):
         # verificamos permisos
-        if not self.request.user.has_perm('nota.view_nota') :
+        if not self.request.user.groups.filter(name='Scrum Master').exists():
             return HttpResponseForbidden()
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
-

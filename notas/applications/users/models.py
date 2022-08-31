@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 #
 from .managers import UserManager
 
-class User(AbstractBaseUser, PermissionsMixin):
 
+class User(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = (
         ('M', 'Masculino'),
         ('F', 'Femenino'),
@@ -15,12 +15,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     full_name = models.CharField('Nombres', max_length=100)
     genero = models.CharField(
-        max_length=1, 
-        choices=GENDER_CHOICES, 
+        max_length=1,
+        choices=GENDER_CHOICES,
         blank=True
     )
     date_birth = models.DateField(
-        'Fecha de nacimiento', 
+        'Fecha de nacimiento',
         blank=True,
         null=True
     )
@@ -36,6 +36,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
-    
+
     def get_full_name(self):
         return self.full_name

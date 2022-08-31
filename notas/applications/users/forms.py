@@ -1,11 +1,10 @@
-  
 from django import forms
 from django.contrib.auth import authenticate
 #
 from .models import User
 
-class UserRegisterForm(forms.ModelForm):
 
+class UserRegisterForm(forms.ModelForm):
     password1 = forms.CharField(
         label='Contraseña',
         required=True,
@@ -26,7 +25,6 @@ class UserRegisterForm(forms.ModelForm):
     )
 
     class Meta:
-
         model = User
         fields = (
             'email',
@@ -51,7 +49,7 @@ class UserRegisterForm(forms.ModelForm):
                 },
             ),
         }
-    
+
     def clean_password2(self):
         if self.cleaned_data['password1'] != self.cleaned_data['password2']:
             self.add_error('password2', 'Las contraseñas no son iguales')
@@ -84,5 +82,5 @@ class LoginForm(forms.Form):
 
         if not authenticate(email=email, password=password):
             raise forms.ValidationError('Los datos de usuario no son correctos')
-        
+
         return self.cleaned_data
